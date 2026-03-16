@@ -1,0 +1,187 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+
+enum TipoClasificacion {
+  G
+  PG
+  PG_13 @map("PG-13")
+  R
+  NC_17 @map("NC-17")
+}
+
+enum RolParticipante {
+  Actor
+  Productor
+  Director
+  Invitado
+}
+
+enum TipoIdioma {
+  Original
+  Doblaje
+  Subtitulo
+}
+
+enum EstadoOrden {
+  PENDIENTE
+  COMPLETADA
+  CANCELADA
+}
+
+enum TipoTransaccion {
+  Compra
+  Alquiler
+}
+
+enum Puntuacion {
+  Excelente
+  buena
+  Regular
+  Mala
+}
+
+model Participante {
+  id_participante Int @id @default(autoincrement())
+  nombre String
+  fecha_nacimiento DateTime?
+  videos Video_participante[]
+}
+
+model Categoria {
+  id_categoria Int @id @default(autoincrement())
+  nombre String @unique
+  videos Video_categoria[]
+}
+
+model Idioma {
+  id_idioma Int @id @default(autoincrement())
+  nombre String @unique
+  videos Video_idioma[]
+}
+
+model Coleccion {
+  isan String @id 
+  titulo String
+  volumen Int
+  videos Video_coleccion[]
+}
+
+model Clasificacion {
+  tipo TipoClasificacion @id
+  descripcion String?
+  video Video[]
+}
+
+model Serie {
+  id_serie Int @id @default(autoincrement())
+  titulo String
+  sinopsis String 
+  videos Video[]
+}
+
+model Cliente {
+  cedula String @id 
+  nombre String 
+  created_At DateTime @default(now())
+  puntos Int @default(0)
+  saldo Decimal @default(0) @db.Decimal(10,2)
+  ordenes Orden[]
+  calificaciones_usuario Clasificacion_usuario[]
+}
+
+model Video {
+  isan String @id 
+  titulo_original String
+  anio_produccion Int
+  duracion_min Int
+  clasificacion_id TipoClasificacion
+  serie_id Int?
+  clasificacion Clasificacion @relation(fields: [clasificacion_id], references: [tipo])
+  serie Serie? @relation(fields: [serie_id], references: [id_serie])
+
+  participantes  Video_participante[]
+  categorias     Video_categoria[]
+  idiomas        Video_idioma[]
+  colecciones    Video_coleccion[]
+  ordenes        Orden_Detalle[]
+  calificaciones Clasificacion_usuario[]
+}
+
+model Video_participante {
+  rol RolParticipante 
+  video_id String @unique
+  participante_id Int @unique
+  video Video @relation(fields: [video_id], references: [isan])
+  participante Participante @relation(fields: [participante_id], references: [id_participante])
+  @@id([video_id, participante_id, rol])
+}
+
+model Video_categoria {
+  video_id String @unique
+  categoria_id Int @unique
+  video Video @relation(fields: [video_id], references: [isan])
+  categoria Categoria @relation(fields: [categoria_id], references: [id_categoria])
+  @@id([video_id, categoria_id])
+}
+
+model Video_idioma {
+  tipo TipoIdioma
+  video_id String @unique
+  idioma_id Int @unique
+  video Video @relation(fields: [video_id], references: [isan])
+  idioma Idioma @relation(fields: [idioma_id], references: [id_idioma])
+  @@id([video_id, idioma_id, tipo])
+}
+
+model Video_coleccion {
+  video_id String @unique
+  coleccion_id String @unique
+  video Video @relation(fields: [video_id], references: [isan])
+  coleccion Coleccion @relation(fields: [coleccion_id], references: [isan])
+  @@id([video_id, coleccion_id])
+}
+
+model Orden_Detalle {
+  id_detalle Int @id @default(autoincrement())
+  orden_id Int 
+  video_id String 
+  tipo_transaccion TipoTransaccion
+  precio_unitario Decimal @db.Decimal(10,2)
+  orden Orden @relation(fields: [orden_id], references: [id_orden])
+  video Video @relation(fields: [video_id], references: [isan])
+}
+
+model Orden {
+  id_orden Int @id @default(autoincrement())
+  cliente_id String
+  fechar_creacion DateTime @default(now())
+  estado EstadoOrden @default(PENDIENTE) 
+  total Decimal @db.Decimal(10,2)
+  puntos_ganados Int @default(0)
+  cliente Cliente @relation(fields: [cliente_id], references: [cedula])
+  orden_detalle Orden_Detalle[]
+}
+
+model Clasificacion_usuario {
+  cliente_id String 
+  video_id String 
+  puntuacion Puntuacion 
+  comentario String?
+  created_At DateTime @default(now()) 
+  cliente Cliente @relation(fields: [cliente_id], references: [cedula])
+  video   Video   @relation(fields: [video_id], references: [isan])
+
+  @@id([cliente_id, video_id])
+}
