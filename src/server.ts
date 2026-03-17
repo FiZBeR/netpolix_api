@@ -1,5 +1,5 @@
 import express from "express"
-import app from "./app.js"
+import app from "./app.ts"
 
 const PORT = 3000;
 

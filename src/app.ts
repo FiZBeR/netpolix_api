@@ -9,9 +9,9 @@ const app = express();
 app.use(express.json())
 
 //Rutas
-app.use('api/categorias/', categoriaRouter);
-app.use('api/idiomas/', idiomaRouter);
-app.use('api/clasificaciones/', clasificacionRouter);
-app.use('api/participante/', participanteRouter);
+app.use('api/categorias', categoriaRouter);
+app.use('api/idiomas', idiomaRouter);
+app.use('api/clasificaciones', clasificacionRouter);
+app.use('api/participantes', participanteRouter);
 
 export default app

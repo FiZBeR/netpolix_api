@@ -4,8 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -52,6 +51,12 @@ enum Puntuacion {
   Mala
 }
 
+enum RolUsuario {
+  ADMIN
+  CLIENTE
+  GERENTE
+}
+
 model Participante {
   id_participante Int @id @default(autoincrement())
   nombre String
@@ -91,9 +96,11 @@ model Serie {
   videos Video[]
 }
 
-model Cliente {
+model Usuario {
   cedula String @id 
   nombre String 
+  password String
+  rol RolUsuario
   created_At DateTime @default(now())
   puntos Int @default(0)
   saldo Decimal @default(0) @db.Decimal(10,2)
@@ -165,23 +172,23 @@ model Orden_Detalle {
 
 model Orden {
   id_orden Int @id @default(autoincrement())
-  cliente_id String
+  usuario_id String
   fechar_creacion DateTime @default(now())
   estado EstadoOrden @default(PENDIENTE) 
   total Decimal @db.Decimal(10,2)
   puntos_ganados Int @default(0)
-  cliente Cliente @relation(fields: [cliente_id], references: [cedula])
+  usuario Usuario @relation(fields: [usuario_id], references: [cedula])
   orden_detalle Orden_Detalle[]
 }
 
 model Clasificacion_usuario {
-  cliente_id String 
+  usuario_id String 
   video_id String 
   puntuacion Puntuacion 
   comentario String?
   created_At DateTime @default(now()) 
-  cliente Cliente @relation(fields: [cliente_id], references: [cedula])
+  usuario Usuario @relation(fields: [usuario_id], references: [cedula])
   video   Video   @relation(fields: [video_id], references: [isan])
 
-  @@id([cliente_id, video_id])
+  @@id([usuario_id, video_id])
 }
