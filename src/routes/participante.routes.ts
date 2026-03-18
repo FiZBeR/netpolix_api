@@ -3,10 +3,10 @@ import { ParticpanteController } from "../controllers/participante.controller.ts
 
 const participanteRouter = Router();
 
-participanteRouter.get('/allparticipants', ParticpanteController.ListarParticipantes);
-participanteRouter.get('/participantsbyid/:id', ParticpanteController.ObtenerParticipante);
-participanteRouter.post('/newparticipant', ParticpanteController.CrearParticipante);
-participanteRouter.put('/updateparticipant/:id', ParticpanteController.ActualizarParticipante);
-participanteRouter.delete('/deleteparticipant/:id', ParticpanteController.EliminarParticipante);
+participanteRouter.get('/', ParticpanteController.findAll);
+participanteRouter.get('/:id', ParticpanteController.findOne);
+participanteRouter.post('/', ParticpanteController.create);
+participanteRouter.put('/:id', ParticpanteController.update);
+participanteRouter.delete('/:id', ParticpanteController.delete);
 
 export default participanteRouter;

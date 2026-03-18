@@ -3,10 +3,10 @@ import { CategoriaController } from "../controllers/categoria.controller.ts";
 
 const categoriaRouter = Router();
 
-categoriaRouter.get('/allcategories', CategoriaController.listarCategorias);
-categoriaRouter.get('/categoriebyid/:id', CategoriaController.ObtenerCategoria);
-categoriaRouter.post('/newcategorie', CategoriaController.crearCategoria);
-categoriaRouter.put('/updatecategorie/:id', CategoriaController.ActualizarCategoria);
-categoriaRouter.delete('/deletecategoria/:id', CategoriaController.EliminarCategoria);
+categoriaRouter.get('/', CategoriaController.findAll);
+categoriaRouter.get('/:id', CategoriaController.findOne);
+categoriaRouter.post('/', CategoriaController.create);
+categoriaRouter.put('/:id', CategoriaController.update);
+categoriaRouter.delete('/:id', CategoriaController.delete);
 
 export default categoriaRouter;

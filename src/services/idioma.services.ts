@@ -22,7 +22,7 @@ export class IdiomaServices {
     static async ObtenerPorId(id: number) {
 
         const idioma = await prisma.idioma.findUnique({
-            where: {id_categoria: id}
+            where: {id_idioma: id}
         });
 
         if(!idioma){
@@ -32,17 +32,17 @@ export class IdiomaServices {
         return idioma
     }
 
-    static async ActualizarIdioma(id: number, nombre: string) {
+    static async ActualizarIdioma(id: number, data: {nombre: string}) {
 
         await this.ObtenerPorId(id);
 
-        if(!nombre || nombre.trim() === ' '){
+        if(!data.nombre || data.nombre.trim() === ' '){
             throw new Error('El nombre del idioma es obligatorio')
         }
 
         return await prisma.idioma.update({
             where: {id_idioma: id},
-            data: {nombre: nombre.trim()}
+            data: {nombre: data.nombre.trim()}
         });
 
     }

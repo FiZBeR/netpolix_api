@@ -35,13 +35,16 @@ export class ParticipanteServices {
         return participante
     }
 
-    static async ActualizarParticipante(id: number, datosActualizados: any) {
+    static async ActualizarParticipante(id: number, data: {nombre: string, fecha_nacimiento: Date}) {
 
         await this.ObtenerPorId(id);
 
         return await prisma.participante.update({
             where: {id_participante: id},
-            data: {datosActualizados}
+            data: {
+                nombre: data.nombre,
+                fecha_nacimiento: data.fecha_nacimiento
+            }
         });
 
     }

@@ -4,7 +4,7 @@ import { ClasificacionServices } from "../services/clasificacion.services.ts";
 
 export class ClasificacionController {
 
-    static async listarClasificacion( req: Request, res: Response): Promise<void> {
+    static async findAll( req: Request, res: Response): Promise<void> {
         try {
             const clasificacion = await ClasificacionServices.ObtenerTodas();
             res.status(200).json(clasificacion);
@@ -14,17 +14,17 @@ export class ClasificacionController {
         }
     }
 
-    static async crearClasificacion(req: Request, res: Response): Promise<void> {
+    static async create(req: Request, res: Response): Promise<void> {
         try {
-            const { id, descripcion} = req.body;
-            const nuevaClasificacion = await ClasificacionServices.CrearClasificacion(id, descripcion);
+            const { tipo, descripcion} = req.body;
+            const nuevaClasificacion = await ClasificacionServices.CrearClasificacion(tipo, descripcion);
             res.status(200).json(nuevaClasificacion);
         } catch (error: any) {
             res.status(400).json({ error: error.message});
         }
     }
 
-    static async actualizarClasificacion( req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async update( req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const tipo: string = req.params.id;
             const idsValidos = ['G', 'PG', 'PG_13', 'R', 'NC_127'];
@@ -34,15 +34,15 @@ export class ClasificacionController {
                 return
             }
 
-            const { descripcion } = req.body;
-            const nuevaClasificacion = ClasificacionServices.Actualizarclasificacion(tipo, descripcion);
-            res.status(200).json(nuevaClasificacion);
+            const datosNuevos = req.body;
+            const resultado = ClasificacionServices.Actualizarclasificacion(tipo, datosNuevos);
+            res.status(200).json(resultado);
         } catch (error: any) {
             res.status(400).json({ error: error.message})
         }
     }
     
-    static async eliminarClasificacion(req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async delete(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             
             const tipo: string = req.params.id;
@@ -60,7 +60,7 @@ export class ClasificacionController {
         }
     }
 
-    static async obtenerPorId(req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async findOne(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const tipo: string = req.params.id;
             const idsValidos = ['G', 'PG', 'PG_13', 'R', 'NC_127'];

@@ -33,13 +33,13 @@ export class CategoriaServices {
         return categoria
     }
 
-    static async ActualizarParticipante(id: number, nombre: string) {
+    static async ActualizarParticipante(id: number, data: {nombre: string}) {
 
         await this.ObtenerPorId(id);
 
         return await prisma.categoria.update({
             where: {id_categoria: id},
-            data: {nombre: nombre.trim()}
+            data: {nombre: data.nombre.trim()}
         });
 
     }

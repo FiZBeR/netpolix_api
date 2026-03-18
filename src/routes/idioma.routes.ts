@@ -3,10 +3,10 @@ import { IdiomaController } from "../controllers/idioma.controller.ts";
 
 const idiomaRouter = Router();
 
-idiomaRouter.get('/alllenguages', IdiomaController.listarIdiomas);
-idiomaRouter.get('/lenguagebyid/:id', IdiomaController.obtenerPorId);
-idiomaRouter.post('newlenguage', IdiomaController.crearIdioma);
-idiomaRouter.put('/updatelenguage/:id', IdiomaController.actualizarIdioma);
-idiomaRouter.delete('/deletelenguage/:id', IdiomaController.eliminarIdioma);
+idiomaRouter.get('/', IdiomaController.findAll);
+idiomaRouter.get('/:id', IdiomaController.findOne);
+idiomaRouter.post('/', IdiomaController.create);
+idiomaRouter.put('/:id', IdiomaController.update);
+idiomaRouter.delete('/:id', IdiomaController.delete);
 
 export default idiomaRouter;

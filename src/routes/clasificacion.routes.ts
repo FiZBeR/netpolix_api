@@ -3,10 +3,10 @@ import { ClasificacionController } from "../controllers/clasificacion.controller
 
 const clasificacionRouter = Router();
 
-clasificacionRouter.get('/allclasifications', ClasificacionController.listarClasificacion);
-clasificacionRouter.get('/clasificationbyid/:id', ClasificacionController.obtenerPorId);
-clasificacionRouter.post('/newclasification', ClasificacionController.crearClasificacion);
-clasificacionRouter.put('/updateclasification/:id', ClasificacionController.actualizarClasificacion);
-clasificacionRouter.delete('/deleteclasification/:id', ClasificacionController.eliminarClasificacion);
+clasificacionRouter.get('/', ClasificacionController.findAll);
+clasificacionRouter.get('/:id', ClasificacionController.findOne);
+clasificacionRouter.post('/', ClasificacionController.create);
+clasificacionRouter.put('/:id', ClasificacionController.update);
+clasificacionRouter.delete('/:id', ClasificacionController.delete);
 
 export default clasificacionRouter;

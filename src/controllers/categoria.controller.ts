@@ -3,7 +3,7 @@ import { CategoriaServices } from "../services/categoria.services.ts";
 
 export class CategoriaController {
 
-    static async listarCategorias( req: Request, res: Response): Promise<void> {
+    static async findAll( req: Request, res: Response): Promise<void> {
         try {
             const categoria = await CategoriaServices.ObtenerTodas();
             res.status(200).json(categoria);
@@ -13,7 +13,7 @@ export class CategoriaController {
         }
     }
 
-    static async crearCategoria( req: Request, res: Response): Promise<void> {
+    static async create( req: Request, res: Response): Promise<void> {
         try {
             const { nombre } = req.body
             const nuevaCategoria = CategoriaServices.CrearCategotia(nombre);
@@ -23,7 +23,7 @@ export class CategoriaController {
         }
     }
 
-    static async ActualizarCategoria (req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async update(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const idParam: string = req.params.id;
             const id = parseInt(idParam, 10);
@@ -33,16 +33,16 @@ export class CategoriaController {
                 return;
             }
 
-            const { nombre } = req.body;
+            const datosNuevos = req.body;
 
-            await CategoriaServices.ActualizarParticipante(id, nombre);
-            res.status(200).json({ nombre });
+            const resultado = await CategoriaServices.ActualizarParticipante(id, datosNuevos);
+            res.status(200).json(resultado);;
         } catch (error: any) {
             res.status(400).json({error: error.message});
         }
     }
 
-    static async EliminarCategoria (req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async delete(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const idParam: string = req.params.id;
             const id = parseInt(idParam, 10);
@@ -59,18 +59,18 @@ export class CategoriaController {
         }
     }
 
-    static async ObtenerCategoria (req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async findOne(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const idParam: string = req.params.id;
             const id = parseInt(idParam, 10);
 
             if(isNaN(id)){
                 res.status(400).json({ error: 'El ID proporcionado debe ser un numero valido'});
-                return;
+                return
             }
 
             const categoria = await CategoriaServices.ObtenerPorId(id);
-            res.status(204).json(categoria);
+            res.status(200).json({categoria});
         } catch (error: any) {
             res.status(400).json({error: error.message});
         }

@@ -3,7 +3,7 @@ import { IdiomaServices } from "../services/idioma.services.ts";
 
 export class IdiomaController {
 
-    static async listarIdiomas( req: Request, res: Response): Promise<void> {
+    static async findAll( req: Request, res: Response): Promise<void> {
         try {
             const idioma = await IdiomaServices.ObtenerTodos();
             res.status(200).json(idioma);
@@ -14,7 +14,7 @@ export class IdiomaController {
     }
 
 
-    static async crearIdioma( req: Request, res: Response): Promise<void> {
+    static async create( req: Request, res: Response): Promise<void> {
         try {
             const { nombre } = req.body;
             const nuevoIdioma = IdiomaServices.CrearIdioma(nombre);
@@ -24,7 +24,7 @@ export class IdiomaController {
         }
     }
 
-    static async actualizarIdioma( req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async update( req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const idParam: string = req.params.id;
             const id = parseInt(idParam, 10);
@@ -34,15 +34,15 @@ export class IdiomaController {
                 return
             }
 
-            const { nombre } = req.body;
-            const nuevoIdioma = IdiomaServices.ActualizarIdioma(id, nombre);
-            res.status(200).json(nuevoIdioma);
+            const datosNuevos = req.body;
+            const resultado = IdiomaServices.ActualizarIdioma(id, datosNuevos);
+            res.status(200).json(resultado);
         } catch (error: any) {
             res.status(400).json({ error: error.message})
         }
     }
     
-    static async eliminarIdioma(req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async delete(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             
             const idParam: string = req.params.id;
@@ -60,7 +60,7 @@ export class IdiomaController {
         }
     }
 
-    static async obtenerPorId(req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async findOne(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const idParam: string = req.params.id;
             const id = parseInt(idParam, 10);

@@ -12,7 +12,7 @@ export class ClasificacionServices {
 
         //Validar tipo en el enum
         const idFinal = tipo?.toUpperCase()
-        const idsValidos = ['G', 'PG', 'PG_13', 'R', 'NC_127'];
+        const idsValidos = ['G', 'PG', 'PG_13', 'R', 'NC_17'];
 
         if(!idsValidos.includes(idFinal)){
             throw new Error('El tipo no es valido');
@@ -42,13 +42,13 @@ export class ClasificacionServices {
         return clasificacion
     }
 
-    static async Actualizarclasificacion(tipo: string, descripcion: string) {
+    static async Actualizarclasificacion(tipo: string, data: {descripcion: string}) {
 
         await this.ObtenerPorId(tipo);
 
         return await prisma.clasificacion.update({
             where: {tipo: tipo},
-            data: {descripcion: descripcion}
+            data: { descripcion: data.descripcion}
         });
 
     }

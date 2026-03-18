@@ -3,7 +3,7 @@ import { ParticipanteServices } from "../services/participante.services.ts";
 
 export class ParticpanteController {
 
-    static async ListarParticipantes (req: Request, res: Response): Promise<void> {
+    static async findAll(req: Request, res: Response): Promise<void> {
         try {
             const participantes = await ParticipanteServices.ObtenerTodos()
             res.status(200).json(participantes)
@@ -13,7 +13,7 @@ export class ParticpanteController {
         }
     }
 
-    static async CrearParticipante (req: Request, res: Response): Promise<void> {
+    static async create(req: Request, res: Response): Promise<void> {
         try {
             const { nombre, fecha_nacimiento} = req.body;
             const fechaFinal: Date = new Date(fecha_nacimiento); 
@@ -24,7 +24,7 @@ export class ParticpanteController {
         }
     }
 
-    static async ActualizarParticipante (req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async update(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const idParam: string = req.params.id;
             const id = parseInt(idParam, 10);
@@ -42,17 +42,17 @@ export class ParticpanteController {
                 fecha_nacimiento: fechaFinal
             }
 
-            await ParticipanteServices.ActualizarParticipante(id, participante);
+            const resultado = await ParticipanteServices.ActualizarParticipante(id, participante);
             res.status(200).json({
                 message: 'Partipante actualizado con exito',
-                participante
+                resultado
             });
         } catch (error: any) {
             res.status(400).json({error: error.message});
         }
     }
 
-    static async EliminarParticipante (req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async delete(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const idParam: string = req.params.id;
             const id = parseInt(idParam, 10);
@@ -69,7 +69,7 @@ export class ParticpanteController {
         }
     }
 
-    static async ObtenerParticipante (req: Request<{ id: string }>, res: Response): Promise<void> {
+    static async findOne(req: Request<{ id: string }>, res: Response): Promise<void> {
         try {
             const idParam: string = req.params.id;
             const id = parseInt(idParam, 10);
@@ -80,7 +80,7 @@ export class ParticpanteController {
             }
 
             const participante = await ParticipanteServices.ObtenerPorId(id);
-            res.status(204).json(participante);
+            res.status(200).json({participante});
         } catch (error: any) {
             res.status(400).json({error: error.message});
         }

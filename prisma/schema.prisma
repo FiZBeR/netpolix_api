@@ -91,8 +91,8 @@ model Clasificacion {
 
 model Serie {
   id_serie Int @id @default(autoincrement())
-  titulo String
-  sinopsis String 
+  titulo String 
+  sinopsis String @db.Text
   videos Video[]
 }
 
@@ -185,7 +185,7 @@ model Clasificacion_usuario {
   usuario_id String 
   video_id String 
   puntuacion Puntuacion 
-  comentario String?
+  comentario String? @db.Text
   created_At DateTime @default(now()) 
   usuario Usuario @relation(fields: [usuario_id], references: [cedula])
   video   Video   @relation(fields: [video_id], references: [isan])
