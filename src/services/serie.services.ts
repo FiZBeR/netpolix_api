@@ -29,6 +29,8 @@ export class SerieServices {
     }
 
     static async actualizar(id: number, data: {titulo: string, sinopsis: string}) {
+
+        await this.listarUno(id);
         
         return await prisma.serie.update({
             where: {id_serie: id},
@@ -40,6 +42,9 @@ export class SerieServices {
     }
 
     static async eliminar(id: number) {
+
+        await this.listarUno(id);
+        
         return await prisma.serie.delete({
             where: { id_serie: id}
         })

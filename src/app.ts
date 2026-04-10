@@ -4,6 +4,7 @@ import idiomaRouter from "./routes/idioma.routes.ts";
 import clasificacionRouter from "./routes/clasificacion.routes.ts";
 import participanteRouter from "./routes/participante.routes.ts";
 import serieRouter from "./routes/serie.routes.ts";
+import coleccionRouter from "./routes/coleccion.routes.ts";
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.use('/api/idiomas', idiomaRouter);
 app.use('/api/clasificaciones', clasificacionRouter);
 app.use('/api/participantes', participanteRouter);
 app.use('/api/series', serieRouter);
+app.use('/api/colecciones', coleccionRouter);
 
 export default app;
