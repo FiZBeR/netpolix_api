@@ -1,14 +1,8 @@
 import { ClienteServices } from "../services/cliente.services.ts";
 import { type Request, type Response } from "express";
 import bcrypt from 'bcrypt';
+import type { CreateUsuarioDTO } from "../utils/interfaces/cliente.dto.ts";
 
-
-interface CreateUserDTO {
-    cedula: string;
-    nombre: string;
-    password: string;
-    rol: RolUsuario; // El Enum que definiste en Prisma
-}
 
 
 export class ClienteController {
@@ -35,32 +29,25 @@ export class ClienteController {
 
     static async create(req: Request, res: Response): Promise<void> {
         try {
-            const { cedula, nombre, password, rol, created_At} = req.body;
+            const body = req.body as CreateUsuarioDTO;
 
             const salt = await bcrypt.genSalt(10);
-            const passwordHasheada = await bcrypt.hash(password, salt);
+            const passwordHasheada = await bcrypt.hash(body.password, salt);
 
-            if(!cedula || !nombre || !password || !rol || !created_At ){
+            if(!body.cedula || !body.nombre || !body.password || !body.rol ){
                 res.status(400).json({ error: 'Todos los campos son obligatorios' });
                 return;
             }
 
-            if (cedula.length < 5) {
-                res.status(400).json({ error: 'La cédula no parece válida' });
+            if (body.cedula.length < 5 || body.password.length < 7) {
+                res.status(400).json({ error: 'La cédula no parece válida o La constraseña debe tener más de 8 caracteres' });
                 return;
             }
 
-            if (password.length < 7) {
-                res.status(400).json({ error: 'La constraseña debe tener más de 8 caracteres' });
-                return;
-            }
+            body.password = passwordHasheada;
 
-            const newCliente = {
-
-            }
-
-            const respuesta = await ClienteServices.crear(newCliente);
-            res.status(201).json(newCliente);
+            const respuesta = await ClienteServices.crear(body);
+            res.status(201).json(respuesta);
         } catch (error: any) {
             res.status(400).json({ error: error.message});
         }
