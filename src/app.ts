@@ -1,4 +1,5 @@
 import express from "express"
+import cors from 'cors';
 import categoriaRouter from "./routes/categoria.routes.ts";
 import idiomaRouter from "./routes/idioma.routes.ts";
 import clasificacionRouter from "./routes/clasificacion.routes.ts";
@@ -9,7 +10,8 @@ import clienteRouter from "./routes/cliente.routes.ts";
 
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
 //Rutas
 app.use('/api/categorias', categoriaRouter);
